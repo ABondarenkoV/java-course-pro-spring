@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1-schema-users
+      author: BondarenkoA
+      comment: Создание таблицы users
+      changes:
+        - sqlFile:
+            path: db/changelog/users/V1_init_table_users.sql
+
+  - changeSet:
+      id: V1_insert_users
+      author: BondarenkoA
+      comment: Наполнение таблицы users
+      changes:
+        - sqlFile:
+            path: db/changelog/users/V1_insert_users.sql
