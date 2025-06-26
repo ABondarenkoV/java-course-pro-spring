@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService implements CommandLineRunner {
-    //- Реализуйте в виде бина UserService, который позволяет: создавать, удалять,
-    // получать одного, получать всех пользователей из базы да
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
@@ -26,36 +24,40 @@ public class UserService implements CommandLineRunner {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUsernameById(Long id) {
-        return userRepository.findById(id);
+    public Optional<User> getUserId(Long id) {
+        Optional<User> userOpt = userRepository.findById(id);
+
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            log.info("Пользователь найден: ID = {}, username = {}", user.getId(), user.getUsername());
+        } else {
+            log.warn("Пользователь с ID = {} не найден", id);
+        }
+
+        return userOpt;
     }
 
     public void createUser(String username) {
         userRepository.save(new User(null, username));
-        log.info("Пользователь " + username + " успешно создан!");
+        log.info("Пользователь {} успешно создан!", username);
     }
 
     public void changeUsername(long id, String newUsername) {
-        Optional<User> userOpt = getUsernameById(id);
+        Optional<User> userOpt = getUserId(id);
         if (userOpt.isPresent()) {
             if (!userOpt.get().getUsername().equals(newUsername)) {
-                System.out.println("Пользователь: " + userOpt.get().getUsername() + " изменил имя на: " + newUsername);
+                log.info("Пользователь: {} изменил имя на: {}", userOpt.get().getUsername(), newUsername);
                 userRepository.save(new User(id, newUsername));
-
             } else
-                System.out.println("У пользователя уже установлено текущее имя: " + newUsername);
-        } else {
-            System.out.println("Пользователь с ID " + id + " не найден.");
+                log.info("У пользователя уже установлено текущее имя: {}", newUsername);
         }
     }
 
     public void deleteUser(long id) {
-        Optional<User> userOpt = getUsernameById(id);
+        Optional<User> userOpt = getUserId(id);
         if (userOpt.isPresent()) {
             userRepository.delete(userOpt.get());
-            System.out.println("Пользователь с ID: " + id + " успешно удалён");
-        } else {
-            System.out.println("Пользователь с ID: " + id + " не найден");
+            log.info("Пользователь с ID: {} успешно удалён", id);
         }
     }
 
@@ -72,14 +74,6 @@ public class UserService implements CommandLineRunner {
                         .collect(Collectors.joining(" , "))
         );
 
-        log.info("Общее кол-во пользователей : {}", getAllUsers().size());
-
-        //Поиск пользователя по ID
-/*        System.out.println(getUsernameById(3L).get());
-        System.out.println(getUsernameById(3L));*/
-
-        //Создание нового пользователя
-        //userService.createUser("Alina2");
         boolean toggle = false;
         for (int i = 0; i < 2; i++) {
             String newUsername = "User" + UUID.randomUUID().toString().substring(0, 5);
@@ -90,17 +84,13 @@ public class UserService implements CommandLineRunner {
 
         for (int i = 1; i < 4; i++) {
             long randNum = new Random().nextInt(getAllUsers().size());
-            getUsernameById(randNum).ifPresentOrElse(
-                    name -> System.out.println("ID: " + randNum + " - " + "Username: " + name.getUsername()),
-                    () -> System.out.println("Пользователь не найден с ID: " + randNum)
-            );
+            getUserId(randNum);
+
         }
 
-        //Изменение имени пользователя
-        changeUsername(10, "User2");
+        changeUsername(9, "User2");
 
-        //Удаление пользователя
-        deleteUser(10);
+        deleteUser(8);
 
         getUsernameByPart("3");
     }

@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "users")
 public class User {
-    //- Создайте класс User (Long id, String username)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
