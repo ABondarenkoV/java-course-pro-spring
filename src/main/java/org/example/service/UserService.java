@@ -5,18 +5,14 @@ import org.example.entity.User;
 import org.example.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements CommandLineRunner {
+public class UserService  {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
@@ -38,7 +34,9 @@ public class UserService implements CommandLineRunner {
     }
 
     public void createUser(String username) {
-        userRepository.save(new User(null, username));
+        User user = new User();
+        user.setUsername(username);
+        userRepository.save(user);
         log.info("Пользователь {} успешно создан!", username);
     }
 
@@ -46,8 +44,10 @@ public class UserService implements CommandLineRunner {
         Optional<User> userOpt = getUserId(id);
         if (userOpt.isPresent()) {
             if (!userOpt.get().getUsername().equals(newUsername)) {
+                User user = new User();
+                user.setUsername(newUsername);
                 log.info("Пользователь: {} изменил имя на: {}", userOpt.get().getUsername(), newUsername);
-                userRepository.save(new User(id, newUsername));
+                userRepository.save(user);
             } else
                 log.info("У пользователя уже установлено текущее имя: {}", newUsername);
         }
@@ -66,7 +66,7 @@ public class UserService implements CommandLineRunner {
         log.info(String.join(" , ", usernames));
     }
 
-    @Override
+/*    @Override
     public void run(String... args) throws Exception {
         log.info(
                 getAllUsers().stream()
@@ -93,6 +93,6 @@ public class UserService implements CommandLineRunner {
         deleteUser(8);
 
         getUsernameByPart("3");
-    }
+    }*/
 
 }
