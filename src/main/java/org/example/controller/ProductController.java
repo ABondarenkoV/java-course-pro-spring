@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.aspect.annotation.LogHttpRequest;
 import org.example.dto.BalanceResponseDto;

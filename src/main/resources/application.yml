@@ -19,5 +19,5 @@ spring:
       ddl-auto: none
   liquibase:
     change-log: classpath:db/changelog/db.changelog-main.yml
-    enabled: true
+    enabled: false
     drop-first: false
