@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,4 +22,8 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    //У каждого пользователя может быть несколько продуктов,
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Product> products;
 }
