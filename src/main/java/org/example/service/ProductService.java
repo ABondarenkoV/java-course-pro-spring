@@ -1,22 +1,22 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.dto.BalanceResponseDto;
 import org.example.dto.ProductResponseDto;
 import org.example.entity.Product;
+import org.example.exception.EntityNotFoundException;
 import org.example.repository.ProductRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService  {
-    private static final Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
 
     public List<ProductResponseDto> getAllProducts() {
@@ -40,24 +40,21 @@ public class ProductService  {
                         product.getProductType()))
                 .collect(Collectors.toList());
     }
-    public Optional<ProductResponseDto> getProductById(long productId) {
+    public ProductResponseDto getProductById(long productId) {
         log.info("Получение продукта по ID : {}", productId);
 
         return productRepository.findById(productId)
-                .map(product -> {
-                    log.info("Найден продукт с ID: {}", product.getId());
-                    return new ProductResponseDto(product.getId(), product.getAccountNumber(), product.getProductType());
-                });
+                .map(product -> new ProductResponseDto(product.getId(), product.getAccountNumber(), product.getProductType()))
+                .orElseThrow(() -> new EntityNotFoundException("Продукт не найден с  ID: " + productId));
+
     }
 
-    public Optional<BalanceResponseDto> getBalanceByUserId(Long userId) {
+    public BalanceResponseDto getBalanceByUserId(Long userId) {
         log.info("Запрос баланса по идентификатору пользователя: {}", userId);
 
         return productRepository.findById(userId)
-                .map(product -> {
-                    log.info("Найден баланс с ID: {}", product.getId());
-                    return new BalanceResponseDto(product.getAccountNumber(),product.getBalance());
-                });
+                .map(product -> new BalanceResponseDto(product.getAccountNumber(),product.getBalance()))
+                .orElseThrow(()->new EntityNotFoundException("Баланс не найден по ID пользователя: " + userId ));
     }
 
 }
