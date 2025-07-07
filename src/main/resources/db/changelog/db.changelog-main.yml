@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: V1-schema-users
+      id: V3_schema_users
       author: BondarenkoA
       comment: Создание таблицы users
       changes:
@@ -8,9 +8,25 @@ databaseChangeLog:
             path: db/changelog/users/V1_init_table_users.sql
 
   - changeSet:
-      id: V1_insert_users
+      id: V3_insert_users
       author: BondarenkoA
       comment: Наполнение таблицы users
       changes:
         - sqlFile:
             path: db/changelog/users/V1_insert_users.sql
+
+  - changeSet:
+      id: V3_schema_products
+      author: BondarenkoA
+      comment: Создание таблицы products
+      changes:
+        - sqlFile:
+            path: db/changelog/products/V1_init_table_product.sql
+
+  - changeSet:
+      id: V3_insert_products
+      author: BondarenkoA
+      comment: Наполнение таблицы products
+      changes:
+        - sqlFile:
+            path: db/changelog/products/V1_insert_products.sql
