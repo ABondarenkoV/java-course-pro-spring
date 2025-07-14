@@ -6,7 +6,6 @@ import org.example.dto.*;
 import org.example.exception.IntegrationException;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -57,23 +56,6 @@ public class IntegrationService {
         );
         System.out.println(response);
         return response;
-    }
-
-    public ResponseErrorDto testError400() {
-        try {
-            return restTemplate.getForObject("/test/error400", ResponseErrorDto.class);
-        } catch (IntegrationException ex) {
-            log.error("Ошибка IntegrationException: код : {}, сообщение : {}", 400, ex.getMessage());
-            return new ResponseErrorDto(400, ex.getMessage());
-        }
-    }
-    public ResponseErrorDto testError500() {
-        try {
-            return restTemplate.getForObject("/test/error500", ResponseErrorDto.class);
-        } catch (IntegrationException ex) {
-            log.error("Ошибка IntegrationException: код : {}, сообщение : {}", 500, ex.getMessage());
-            return new ResponseErrorDto(500, ex.getMessage());
-        }
     }
 
 }
